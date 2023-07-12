@@ -1,0 +1,10 @@
+name: hacienda-readformpdf
+recipe: lamp
+config:
+  type: php:7.4
+  webroot: ./public
+services:
+  appserver:
+    type: php:7.4
+database:
+  type: mysql

@@ -2,191 +2,132 @@
 
 namespace App\Entity;
 
-use App\Repository\TaxModelRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TaxModelRepository;
+use Dracoder\EntityBundle\Model\AbstractEntity;
+use Dracoder\EntityBundle\Model\AbstractTimetrackeableEntity;
+use Symfony\Component\DependencyInjection\Loader\ProtectedPhpFileLoader;
 
 /**
  * @ORM\Entity(repositoryClass=TaxModelRepository::class)
  */
-class TaxModel
+abstract class TaxModel extends AbstractTimetrackeableEntity
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updateAt;
-
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $customDataId = [];
-
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $taxName;
+    protected $taxName;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $presentationDate;
+    protected $presentationDate;
 
     /**
      * @ORM\Column(type="string", length=60)
      */
-    private $assignedRecordNumber;
+    protected $assignedRecordNumber;
 
     /**
      * @ORM\Column(type="string", length=60)
      */
-    private $csvCode;
+    protected $csvCode;
 
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $presenterNifNumber;
+    protected $presenterNifNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $presenterSocialDenomination;
+    protected $presenterSocialDenomination;
 
     /**
      * @ORM\Column(type="string", length=120)
      */
-    private $presenterAs;
+    protected $presenterAs;
 
     /**
      * @ORM\Column(type="string", length=120)
      */
-    private $wayOfEntry;
+    protected $wayOfEntry;
 
     /**
      * @ORM\Column(type="string", length=60)
      */
-    private $supportingDocumentNumber;
+    protected $supportingDocumentNumber;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $presentationPurpose;
+    protected $presentationPurpose;
 
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $declarantNifNumber;
+    protected $declarantNifNumber;
 
     /**
      * @ORM\Column(type="string", length=120)
      */
-    private $declarantSocialDenomination;
+    protected $declarantSocialDenomination;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $legalRepresentativeNifNumber;
+    protected $legalRepresentativeNifNumber;
 
     /**
      * @ORM\Column(type="string", length=4, nullable=true)
      */
-    private $financialExercise;
+    protected $financialExercise;
 
     /**
      * @ORM\Column(type="string", length=1, nullable=true)
      */
-    private $financialExerciseType;
+    protected $financialExerciseType;
 
     /**
      * @ORM\Column(type="string", length=4, nullable=true)
      */
-    private $financialPeriod;
+    protected $financialPeriod;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $presentationMode;
+    protected $presentationMode;
 
     /**
      * @ORM\Column(type="string", length=4, nullable=true)
      */
-    private $economicActivitiesNationalClassification;
+    protected $economicActivitiesNationalClassification;
 
     /**
      * @ORM\Column(type="string", length=120, nullable=true)
      */
-    private $contactPersonNameAndSurname;
+    protected $contactPersonNameAndSurname;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $contactPersonPhone;
+    protected $contactPersonPhone;
 
     /**
      * @ORM\Column(type="string", length=60, nullable=true)
      */
-    private $contactPersonEmail;
+    protected $contactPersonEmail;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $storeOutputOrigin;
+    protected $storeOutputOrigin;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $storeOutputOriginText;
+    protected $storeOutputOriginText;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdateAt(): ?\DateTimeInterface
-    {
-        return $this->updateAt;
-    }
-
-    public function setUpdateAt(\DateTimeInterface $updateAt): self
-    {
-        $this->updateAt = $updateAt;
-
-        return $this;
-    }
-
-    public function getCustomDataId(): ?array
-    {
-        return $this->customDataId;
-    }
-
-    public function setCustomDataId(?array $customDataId): self
-    {
-        $this->customDataId = $customDataId;
-
-        return $this;
-    }
 
     public function getTaxName(): ?string
     {

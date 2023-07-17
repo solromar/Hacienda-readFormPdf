@@ -11,12 +11,6 @@ use Dracoder\EntityBundle\Model\AbstractTimetrackeableEntity;
  */
 class Model030 extends AbstractTimetrackeableEntity
 {
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $taxModelId;
-
     /**
      * @ORM\Column(type="string", length=20)
      */
@@ -508,18 +502,7 @@ class Model030 extends AbstractTimetrackeableEntity
     private $box805;
 
 
-    public function getTaxModelId(): ?string
-    {
-        return $this->taxModelId;
-    }
-
-    public function setTaxModelId(string $taxModelId): self
-    {
-        $this->taxModelId = $taxModelId;
-
-        return $this;
-    }
-
+    
     public function getBox1(): ?string
     {
         return $this->box1;

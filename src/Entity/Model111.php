@@ -11,12 +11,6 @@ use Dracoder\EntityBundle\Model\AbstractTimetrackeableEntity;
  */
 class Model111 extends AbstractTimetrackeableEntity
 {
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $taxModelId;
-
     /**
      * @ORM\Column(type="string", length=4, nullable=true)
      */
@@ -207,19 +201,14 @@ class Model111 extends AbstractTimetrackeableEntity
      */
     private $associatedSupportingDocumentNumber;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models111s")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $taxModels;
+
     
-    public function getTaxModelId(): ?int
-    {
-        return $this->taxModelId;
-    }
-
-    public function setTaxModelId(int $taxModelId): self
-    {
-        $this->taxModelId = $taxModelId;
-
-        return $this;
-    }
-
+   
     public function getFinancialExercise(): ?string
     {
         return $this->financialExercise;
@@ -672,6 +661,18 @@ class Model111 extends AbstractTimetrackeableEntity
     public function setAssociatedSupportingDocumentNumber(?string $associatedSupportingDocumentNumber): self
     {
         $this->associatedSupportingDocumentNumber = $associatedSupportingDocumentNumber;
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

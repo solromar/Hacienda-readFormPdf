@@ -2,56 +2,63 @@
 
 namespace App\Service;
 
+
 use App\Entity\Model030;
 use App\Entity\Model036;
 use App\Entity\Model111;
 use Spatie\PdfToText\Pdf;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ModelService
 {
-    private $container;
-
-    public function __construct(ParameterBagInterface $container)
+    
+    public function processFile($filePath, $fileName)
     {
-        $this->container = $container;
-    }
+        // Crea un arreglo vacío para almacenar el texto de cada archivo PDF
+        $textosDePdfs = [];
+        $pdfRoute = $filePath . $fileName;
 
-    public function processPDFFiles()
-    {
-    }
+        //pdfToText para extraer el texto y almacenarlo en []
+        $textoDelPdf = $this->pdfToText($pdfRoute);
+        $textosDePdfs[] = $textoDelPdf;
+        //$entityManager = $this->getDoctrine()->getManager();
 
-    public function classify($pdfFiles)
-    {
-        foreach ($pdfFiles as $pdfFile) {
-            $pdfText = Pdf::getText($pdfFile);
-            $pdfCode = $this->extractPdfCode($pdfText);
+        // Obtiene el tipo de archivo
+        $fileNameParts = explode('_', $fileName);
+        $modelType = $fileNameParts[0]; 
 
-            $genericModel = null;
+        $fileNameParts = null;
 
-            if ($pdfCode == 111) {
-                $genericModel = new Model111();
-            }
-
-            if ($pdfCode == 300) {
-                $genericModel = new Model030();
-            }
-
-            if ($pdfCode == 720) {
-                $genericModel = new Model036();
-            }
-
-            $this->processPDFFiles($genericModel, $pdfText);
-            //$this->getDoctrine()->getEntityManager()->persist($genericModel);
-            //$this->getDoctrine()->getEntityManager()->flush();
+        if ($modelType == 030) {
+            $fileNameParts = new Model030();
         }
+        if ($modelType == 036) {
+            $fileNameParts = new Model036();
+        }
+        if ($modelType == 111) {
+            $fileNameParts = new Model111();
+        }
+        return $fileNameParts;
 
-        return $genericModel;
+
     }
 
-
-    public function extractPdfCode(string $pdfText) 
+    public function pdfToText($filePath)
     {
-        // aca vendria de $taxName de la entidad taxModel????
+        $pdf = new Pdf();
+        $text = (new Pdf())
+            ->setPdf(($filePath), $pdf)->text();
+
+        return $text;
     }
+
+
+
+    
 }
+
+//Establece la logica de la app, llama a otros servicios y repositorios

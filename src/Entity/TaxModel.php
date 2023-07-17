@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TaxModelRepository;
 use Dracoder\EntityBundle\Model\AbstractEntity;
@@ -128,7 +130,18 @@ abstract class TaxModel extends AbstractTimetrackeableEntity
      */
     protected $storeOutputOriginText;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Model111::class, mappedBy="taxModels")
+     */
+    private $models111s;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->models111s = new ArrayCollection();
+    }
+
+    
     public function getTaxName(): ?string
     {
         return $this->taxName;
@@ -404,4 +417,36 @@ abstract class TaxModel extends AbstractTimetrackeableEntity
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Model111>
+     */
+    public function getModels111s(): Collection
+    {
+        return $this->models111s;
+    }
+
+    public function addModels111(Model111 $models111): self
+    {
+        if (!$this->models111s->contains($models111)) {
+            $this->models111s[] = $models111;
+            $models111->setTaxModels($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModels111(Model111 $models111): self
+    {
+        if ($this->models111s->removeElement($models111)) {
+            // set the owning side to null (unless already changed)
+            if ($models111->getTaxModels() === $this) {
+                $models111->setTaxModels(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 }

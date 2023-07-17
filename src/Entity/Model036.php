@@ -2,21 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\Model036Repository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\Model036Repository;
+use Dracoder\EntityBundle\Model\AbstractTimetrackeableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=Model036Repository::class)
  */
-class Model036
+class Model036 extends AbstractTimetrackeableEntity
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
+    
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
@@ -2677,11 +2672,7 @@ class Model036
      */
     private $boxC69;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
+    
     public function getBox65(): ?string
     {
         return $this->box65;

@@ -11,13 +11,6 @@ use Dracoder\EntityBundle\Model\AbstractTimetrackeableEntity;
  */
 class ModelD6 extends AbstractTimetrackeableEntity
 {
-    
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $taxModelId;
-
     /**
      * @ORM\Column(type="string", length=4)
      */
@@ -38,18 +31,6 @@ class ModelD6 extends AbstractTimetrackeableEntity
      */
     private $economicActivitiesNationalClassification;
 
-    
-    public function getTaxModelId(): ?string
-    {
-        return $this->taxModelId;
-    }
-
-    public function setTaxModelId(string $taxModelId): self
-    {
-        $this->taxModelId = $taxModelId;
-
-        return $this;
-    }
 
     public function getFinancialExercise(): ?string
     {

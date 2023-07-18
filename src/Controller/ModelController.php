@@ -2,22 +2,31 @@
 
 namespace App\Controller;
 
-use App\Entity\Model036;
-use App\Entity\Model100;
-use App\Entity\Model111;
-use App\Service\ModelService;
+
+use App\Service\TaxModelService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
 
 class ModelController extends AbstractController
 {
     /**
      * @Route("/model", name="app_model")
      */  
-    
+    public function index(TaxModelService $taxModelService): Response
+    {
+        
+
+        
+
+        $genericModel = $taxModelService->extractText();
+
+        return $this->render('model/index.html.twig', [
+            'controller_name' => 'ModelController',
+        ]);
+    }
 }
 
 

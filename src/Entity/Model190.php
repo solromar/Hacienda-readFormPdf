@@ -69,6 +69,11 @@ class Model190 extends AbstractTimetrackeableEntity
      */
     private $perceptions;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models190s")
+     */
+    private $taxModels;
+
     public function __construct()
     {
         parent::__construct();
@@ -222,6 +227,18 @@ class Model190 extends AbstractTimetrackeableEntity
                 $perception->setModel190Perceptions(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

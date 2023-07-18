@@ -42,6 +42,11 @@ class Model220 extends AbstractTimetrackeableEntity
      */
     private $associatedSupportingDocumentNumber;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models220s")
+     */
+    private $taxModels;
+
     
     public function getFinancialExercise(): ?string
     {
@@ -111,6 +116,18 @@ class Model220 extends AbstractTimetrackeableEntity
     public function setAssociatedSupportingDocumentNumber(?string $associatedSupportingDocumentNumber): self
     {
         $this->associatedSupportingDocumentNumber = $associatedSupportingDocumentNumber;
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

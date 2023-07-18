@@ -377,6 +377,11 @@ class Model202 extends AbstractTimetrackeableEntity
      */
     private $negativeStatement;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models202s")
+     */
+    private $taxModels;
+
     
     public function getFinancialExercise(): ?string
     {
@@ -1250,6 +1255,18 @@ class Model202 extends AbstractTimetrackeableEntity
     public function setNegativeStatement(?bool $negativeStatement): self
     {
         $this->negativeStatement = $negativeStatement;
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

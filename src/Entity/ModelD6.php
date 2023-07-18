@@ -31,6 +31,11 @@ class ModelD6 extends AbstractTimetrackeableEntity
      */
     private $economicActivitiesNationalClassification;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="modelsD6s")
+     */
+    private $taxModels;
+
 
     public function getFinancialExercise(): ?string
     {
@@ -76,6 +81,18 @@ class ModelD6 extends AbstractTimetrackeableEntity
     public function setEconomicActivitiesNationalClassification(?string $economicActivitiesNationalClassification): self
     {
         $this->economicActivitiesNationalClassification = $economicActivitiesNationalClassification;
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

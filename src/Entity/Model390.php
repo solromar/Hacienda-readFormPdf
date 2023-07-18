@@ -1016,6 +1016,11 @@ class Model390 extends AbstractTimetrackeableEntity
      */
     private $box662;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models390s")
+     */
+    private $taxModels;
+
 
     public function getFinancialExercise(): ?string
     {
@@ -3425,6 +3430,18 @@ class Model390 extends AbstractTimetrackeableEntity
     public function setBox662(?float $box662): self
     {
         $this->box662 = $box662;
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

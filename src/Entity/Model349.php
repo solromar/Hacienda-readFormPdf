@@ -84,6 +84,11 @@ class Model349 extends AbstractTimetrackeableEntity
      */
     private $intracommunityOperations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models349s")
+     */
+    private $taxModels;
+
     public function __construct()
     {
         $this->previousPeriodRectifications = new ArrayCollection();
@@ -291,6 +296,18 @@ class Model349 extends AbstractTimetrackeableEntity
                 $intracommunityOperation->setModel349intracommunityOperation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

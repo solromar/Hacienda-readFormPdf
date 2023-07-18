@@ -69,6 +69,11 @@ class Model347 extends AbstractTimetrackeableEntity
      */
     private $businessPremiseses;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=TaxModel::class, inversedBy="models347s")
+     */
+    private $taxModels;
+
     public function __construct()
     {
         parent::__construct();
@@ -241,6 +246,18 @@ class Model347 extends AbstractTimetrackeableEntity
                 $businessPremisese->setModel347businessPremiseses(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTaxModels(): ?TaxModel
+    {
+        return $this->taxModels;
+    }
+
+    public function setTaxModels(?TaxModel $taxModels): self
+    {
+        $this->taxModels = $taxModels;
 
         return $this;
     }

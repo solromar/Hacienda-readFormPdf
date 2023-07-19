@@ -11,45 +11,7 @@ use Spatie\PdfToText\Pdf;
 class ModelService
 {
     
-    public function processFile($filePath, $fileName)
-    {
-        // Crea un arreglo vacío para almacenar el texto de cada archivo PDF
-        $textosDePdfs = [];
-        $pdfRoute = $filePath . $fileName;
-
-        //pdfToText para extraer el texto y almacenarlo en []
-        $textoDelPdf = $this->pdfToText($pdfRoute);
-        $textosDePdfs[] = $textoDelPdf;
-        //$entityManager = $this->getDoctrine()->getManager();
-
-        // Obtiene el tipo de archivo
-        $fileNameParts = explode('_', $fileName);
-        $modelType = $fileNameParts[0]; 
-
-        $fileNameParts = null;
-
-        if ($modelType == 030) {
-            $fileNameParts = new Model030();
-        }
-        if ($modelType == 036) {
-            $fileNameParts = new Model036();
-        }
-        if ($modelType == 111) {
-            $fileNameParts = new Model111();
-        }
-        return $fileNameParts;
-
-
-    }
-
-    public function pdfToText($filePath)
-    {
-        $pdf = new Pdf();
-        $text = (new Pdf())
-            ->setPdf(($filePath), $pdf)->text();
-
-        return $text;
-    }
+    
 
 
 

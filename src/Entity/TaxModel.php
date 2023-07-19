@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader\ProtectedPhpFileLoader;
 /**
  * @ORM\Entity(repositoryClass=TaxModelRepository::class)
  */
-abstract class TaxModel extends AbstractTimetrackeableEntity
+ class TaxModel extends AbstractTimetrackeableEntity
 {
     /**
      * @ORM\Column(type="string", length=255)

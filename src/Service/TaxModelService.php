@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\Model111;
+use App\Entity\Model303;
+use App\Entity\Model347;
+use App\Entity\TaxModel;
 use Spatie\PdfToText\Pdf;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +19,7 @@ class TaxModelService
     {
         $this->parameterBag = $parameterBag;
     }
-
+    // ---------------------------------------------------------------------------------------------------------------
     public function extractText()
     {
         // Carpeta donde se encuentran los PDF
@@ -23,7 +27,6 @@ class TaxModelService
 
         // Obtener la lista de archivos PDF en la carpeta
         $pdfFiles = glob($pdfFolderPath . '/*.[pP][dD][fF]');
-        
 
         $pdfTexts = []; //arreglo vacio para almacenar los textos
 
@@ -32,7 +35,6 @@ class TaxModelService
             // Leer el contenido del archivo PDF
             $pdfData = file_get_contents($pdfFile);
             $pdfData = $this->pdfToText($pdfFile);
-
             
 
             // Almacenar la información en el arreglo $pdfTexts
@@ -52,8 +54,50 @@ class TaxModelService
         ]);
     }
 
+    //--------------------------------------------------------------------------------------Clasificar los PDF segun su modelo
+    public function classify($pdfTexts)
+{
+    $dataByModel = []; // Arreglo para almacenar los datos de cada modelo
 
-    // Función para convertir un archivo PDF a texto
+    foreach ($pdfTexts as $pdfFile) {
+        // Leer el contenido del archivo PDF
+        $pdfData = $this->pdfToText($pdfFile);
+        // Buscar la palabra "modelo" en el contenido del PDF
+        $matches = [];
+        preg_match('/modelo\s+(\w{3})/i', $pdfData, $matches);
+
+        if (isset($matches[1])) {
+            $taxName = $matches[1];
+
+            // Crear una nueva entidad TaxModel y asignar el valor encontrado
+            $taxModel = new TaxModel();
+            $taxModel->setTaxName($taxName);
+
+            $genericModel = null;
+
+            if ($taxName == '111') {
+                $genericModel = new Model111();
+            } elseif ($taxName == '303') {
+                $genericModel = new Model303();
+            } elseif ($taxName == '347') {
+                $genericModel = new Model347();
+            }
+
+            // Extraer los datos específicos del modelo y asignarlos al objeto $genericModel
+            $this->extractText($genericModel, $pdfData);
+
+            // Agregar los datos capturados al arreglo $dataByModel, indexado por el nombre del modelo
+            $dataByModel[$taxName][] = $genericModel;
+            
+        }
+    }
+
+    return $dataByModel;
+}
+
+
+
+    // ------------------------------------------------------------------Función para convertir un archivo PDF a texto
     public function pdfToText($pdfFolderPath)
     {
         $pdf = new Pdf();

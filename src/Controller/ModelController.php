@@ -17,13 +17,19 @@ class ModelController extends AbstractController
     /**
      * @Route("/model", name="app_model")
      */
-    public function mostrarPdfs(TaxModelService $taxModelService)
+    public function showModelData(TaxModelService $taxModelService)
     {
-        // Utiliza el servicio para extraer el texto de los archivos PDF
-        return $taxModelService->extractText();
+        // Carpeta donde se encuentran los PDF (si no las proporcionaste desde el controlador)
+        $pdfFolderPath = $this->getParameter('kernel.project_dir') . '/public/files/';
+        $pdfFiles = glob($pdfFolderPath . '/*.[pP][dD][fF]');
 
-        
-        
+        // Obtener los datos clasificados por modelo utilizando el servicio TaxModelService
+        $dataByModel = $taxModelService->classify($pdfFiles);
+
+        // Mostrar los datos capturados por modelo en formato JSON
+        return new Response(json_encode($dataByModel, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), 200, [
+            'Content-Type' => 'application/json; charset=UTF-8'
+        ]);
     }
 }
 

@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use Spatie\PdfToText\Pdf;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 
@@ -20,36 +22,44 @@ class TaxModelService
         $pdfFolderPath = $this->parameterBag->get('kernel.project_dir') . '/public/files/';
 
         // Obtener la lista de archivos PDF en la carpeta
-        $pdfFiles = glob($pdfFolderPath . '/*.pdf');
+        $pdfFiles = glob($pdfFolderPath . '/*.[pP][dD][fF]');
+        
+
+        $pdfTexts = []; //arreglo vacio para almacenar los textos
 
         // Recorrer los archivos PDF
         foreach ($pdfFiles as $pdfFile) {
             // Leer el contenido del archivo PDF
             $pdfData = file_get_contents($pdfFile);
+            $pdfData = $this->pdfToText($pdfFile);
+
             
+
+            // Almacenar la información en el arreglo $pdfTexts
+            $pdfTexts[] = $pdfData;
         }
+        // Convertir el contenido del PDF a UTF-8
+        array_walk_recursive($pdfTexts, function (&$value) {
+            $value = mb_convert_encoding($value, 'UTF-8', 'auto');
+        });
 
-                
-        $this->processFile($pdfData, $pdfFile);
+        // Convertir el arreglo a JSON con formato legible
+        $jsonContent = json_encode($pdfTexts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        // Devolver el contenido JSON como una Response
+        return new Response($jsonContent, 200, [
+            'Content-Type' => 'application/json; charset=UTF-8'
+        ]);
     }
 
-    public function processFile($pdfFolderPath, $pdfFile)
-    {
-        
-        // Crea un arreglo vacío para almacenar el texto de cada archivo PDF
-        $pdfFiles = [];
-        $pdfRoute = $pdfFolderPath . $pdfFile;
-        dd($pdfFiles);
-        //pdfToText para extraer el texto y almacenarlo en []
-        $pdfFile = Pdf::getText($pdfRoute);
-        $pdfFiles[] = $pdfFile;
-    }
+
     // Función para convertir un archivo PDF a texto
-    public function pdfToText($filePath)
+    public function pdfToText($pdfFolderPath)
     {
         $pdf = new Pdf();
-        $text = (new Pdf())
-            ->setPdf(($filePath), $pdf)->text();
+        $text = $pdf->getText($pdfFolderPath);
+        // Asegurar que el contenido esté en UTF-8
+        $text = mb_convert_encoding($text, 'UTF-8', 'auto');
 
         return $text;
     }

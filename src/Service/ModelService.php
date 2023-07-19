@@ -7,11 +7,6 @@ use App\Entity\Model030;
 use App\Entity\Model036;
 use App\Entity\Model111;
 use Spatie\PdfToText\Pdf;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ModelService
 {

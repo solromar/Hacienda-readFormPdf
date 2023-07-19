@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 
+use Spatie\PdfToText\Pdf;
 use App\Service\TaxModelService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -14,18 +16,14 @@ class ModelController extends AbstractController
 {
     /**
      * @Route("/model", name="app_model")
-     */  
-    public function index(TaxModelService $taxModelService): Response
+     */
+    public function mostrarPdfs(TaxModelService $taxModelService)
     {
-        
+        // Utiliza el servicio para extraer el texto de los archivos PDF
+        return $taxModelService->extractText();
 
         
-
-        $genericModel = $taxModelService->extractText();
-
-        return $this->render('model/index.html.twig', [
-            'controller_name' => 'ModelController',
-        ]);
+        
     }
 }
 

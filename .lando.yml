@@ -6,5 +6,8 @@ config:
 services:
   appserver:
     type: php:7.4
+    extras:
+      - apt-get update -y
+      - apt-get install poppler-utils -y
 database:
   type: mysql

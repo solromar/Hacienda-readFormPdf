@@ -29,4 +29,11 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\Service\FormRecognizerService:
+        arguments:
+            $subscriptionKey: 'd93168d86fad48e39eeea9b66122c319'
+            
+
+  
+
 

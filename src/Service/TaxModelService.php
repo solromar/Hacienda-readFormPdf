@@ -33,68 +33,72 @@ class TaxModelService
         // Recorrer los archivos PDF
         foreach ($pdfFiles as $pdfFile) {
             // Leer el contenido del archivo PDF
-            $pdfData = file_get_contents($pdfFile);
-            $pdfData = $this->pdfToText($pdfFile);
+            $pdfData = $this->pdfToText($pdfFile);          
             
 
-            // Almacenar la información en el arreglo $pdfTexts
+            //if (is_array($pdfData)) {
+                // Convertir el arreglo a una cadena de texto separada por saltos de línea
+               // $pdfData = implode("\n", $pdfData);
+            //}
+
+            // Agregar el contenido del PDF al arreglo $pdfTexts
             $pdfTexts[] = $pdfData;
         }
-        // Convertir el contenido del PDF a UTF-8
+
+        // Convertir el contenido de los PDF a UTF-8
         array_walk_recursive($pdfTexts, function (&$value) {
             $value = mb_convert_encoding($value, 'UTF-8', 'auto');
         });
 
-        // Convertir el arreglo a JSON con formato legible
-        $jsonContent = json_encode($pdfTexts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        // Unir los textos de los PDF en una sola cadena de texto, separados por saltos de línea
+        $combinedText = implode("\n", $pdfTexts);
 
-        // Devolver el contenido JSON como una Response
-        return new Response($jsonContent, 200, [
-            'Content-Type' => 'application/json; charset=UTF-8'
+        // Devolver el contenido de los archivos PDF como texto plano
+        return new Response($combinedText, 200, [
+            'Content-Type' => 'text/plain; charset=UTF-8'
         ]);
     }
 
+
     //--------------------------------------------------------------------------------------Clasificar los PDF segun su modelo
     public function classify($pdfTexts)
-{
-    $dataByModel = []; // Arreglo para almacenar los datos de cada modelo
+    {
+        $dataByModel = []; // Arreglo para almacenar los datos de cada modelo
 
-    foreach ($pdfTexts as $pdfFile) {
-        // Leer el contenido del archivo PDF
-        $pdfData = $this->pdfToText($pdfFile);
-        // Buscar la palabra "modelo" en el contenido del PDF
-        $matches = [];
-        preg_match('/modelo\s+(\w{3})/i', $pdfData, $matches);
+        foreach ($pdfTexts as $pdfFile) {
+            // Leer el contenido del archivo PDF
+            $pdfData = $this->pdfToText($pdfFile);
+            // Buscar la palabra "modelo" en el contenido del PDF
+            $matches = [];
+            preg_match('/modelo\s+(\w{3})/i', $pdfData, $matches);
 
-        if (isset($matches[1])) {
-            $taxName = $matches[1];
+            if (isset($matches[1])) {
+                $taxName = $matches[1];
 
-            // Crear una nueva entidad TaxModel y asignar el valor encontrado
-            $taxModel = new TaxModel();
-            $taxModel->setTaxName($taxName);
+                // Crear una nueva entidad TaxModel y asignar el valor encontrado
+                $taxModel = new TaxModel();
+                $taxModel->setTaxName($taxName);
 
-            $genericModel = null;
+                $genericModel = null;
 
-            if ($taxName == '111') {
-                $genericModel = new Model111();
-            } elseif ($taxName == '303') {
-                $genericModel = new Model303();
-            } elseif ($taxName == '347') {
-                $genericModel = new Model347();
+                if ($taxName == '111') {
+                    $genericModel = new Model111();
+                } elseif ($taxName == '303') {
+                    $genericModel = new Model303();
+                } elseif ($taxName == '347') {
+                    $genericModel = new Model347();
+                }
+
+                // Extraer los datos específicos del modelo y asignarlos al objeto $genericModel
+                $this->extractText($genericModel, $pdfData);
+
+                // Agregar los datos capturados al arreglo $dataByModel, indexado por el nombre del modelo
+                $dataByModel[$taxName][] = $genericModel;
             }
-
-            // Extraer los datos específicos del modelo y asignarlos al objeto $genericModel
-            $this->extractText($genericModel, $pdfData);
-
-            // Agregar los datos capturados al arreglo $dataByModel, indexado por el nombre del modelo
-            $dataByModel[$taxName][] = $genericModel;
-            
         }
+
+        return $dataByModel;
     }
-
-    return $dataByModel;
-}
-
 
 
     // ------------------------------------------------------------------Función para convertir un archivo PDF a texto
@@ -102,8 +106,7 @@ class TaxModelService
     {
         $pdf = new Pdf();
         $text = $pdf->getText($pdfFolderPath);
-        // Asegurar que el contenido esté en UTF-8
-        $text = mb_convert_encoding($text, 'UTF-8', 'auto');
+       
 
         return $text;
     }

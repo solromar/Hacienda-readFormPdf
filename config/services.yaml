@@ -31,7 +31,7 @@ services:
 
     App\Service\FormRecognizerService:
         arguments:
-            $subscriptionKey: 'd93168d86fad48e39eeea9b66122c319'
+            $subscriptionKey: '20dfbbfdc4e340c686fdf27f6aa08830'
             
 
   

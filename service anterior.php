@@ -64,11 +64,34 @@ class TaxModelService
             preg_match('/modelo\s+(\w{3})/i', $pdfData, $matches);
 
             if (isset($matches[1])) {
-                $taxValue = trim($matches[1]); // Limpiar espacios en blanco alrededor del valor si es necesario
-    
-                // Agregar el valor capturado al arreglo $dataByModel
-                $dataByModel[] = $taxValue;
-               
+                $taxName = $matches[1];
+
+                // Crear una nueva entidad TaxModel y asignar el valor encontrado
+                $taxModel = new TaxModel();
+                $taxModel->setTaxName($taxName);
+
+                $genericModel = null;
+
+                if ($taxName == '111') {
+                    $genericModel = new Model111();
+                } elseif ($taxName == '115') {
+                    $genericModel = new Model115();
+                } elseif ($taxName == '190') {
+                    $genericModel = new Model190();
+                }elseif ($taxName == '200') {
+                    $genericModel = new Model200();
+                }elseif ($taxName == '303') {
+                    $genericModel = new Model303();
+                }elseif ($taxName == '347') {
+                    $genericModel = new Model347();
+                }elseif ($taxName == '390') {
+                    $genericModel = new Model390();
+                }
+                // Extraer los datos específicos del modelo y asignarlos al objeto $genericModel
+                $this->extractText($genericModel, $pdfData);
+
+                // Agregar los datos capturados al arreglo $dataByModel, indexado por el nombre del modelo
+                $dataByModel[$taxName][] = $genericModel;
             }
         }
         return $dataByModel;

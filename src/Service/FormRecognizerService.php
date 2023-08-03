@@ -9,16 +9,14 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class FormRecognizerService
 {
-
-    private $subscriptionKey;
     private $parameterBag;
+    private $subscriptionKey;  
 
     public function __construct(string $subscriptionKey, ParameterBagInterface $parameterBag)
     {
         $this->subscriptionKey = $subscriptionKey;
         $this->parameterBag = $parameterBag;
-    }
-    
+    }    
     
     // --------------------------------------------- Solicitud POST para obtener el resultID ------------------------------------------------------------------------//
     public function analyzeDocumentAction($modelId, $pdfFile)
